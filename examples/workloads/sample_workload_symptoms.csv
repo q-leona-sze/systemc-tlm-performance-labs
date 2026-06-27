@@ -1,0 +1,7 @@
+workload,description,concurrent_initiators,memory_utilization_ratio,queue_peak,p99_latency_ns,throughput_req_per_us,avg_outstanding,burstiness_score,boundary_crossing_rate,ordering_events,read_write_interference_score,qos_class_pressure,starvation_events,expected_family
+mobile_ai_camera_pipeline,CPU NPU ISP DMA-like concurrent traffic,5,0.68,22,190,0.95,12,0.45,0.15,1,0.28,0.25,1,shared_fabric_pressure
+transformer_decode_memory_wall,high memory utilization and outstanding bandwidth saturation,2,0.96,34,260,1.75,36,0.72,0.18,1,0.22,0.20,0,throughput_bandwidth_wall
+dma_bulk_write_interference,write-heavy DMA interference with ordering and read tail pressure,3,0.74,28,220,0.82,10,0.35,0.72,5,0.88,0.78,3,noc_qos_coherency_boundary
+coherent_noncoherent_boundary_mix,boundary crossing and ordering events high,4,0.70,20,240,0.78,14,0.42,0.85,7,0.70,0.63,2,noc_qos_coherency_boundary
+gpu_like_bursty_kernel,bursty high-throughput memory pressure,2,0.91,30,280,1.60,28,0.90,0.22,1,0.25,0.25,0,throughput_bandwidth_wall
+mixed_soc_stress,shared fabric bandwidth wall and boundary pressure mixed,5,0.90,32,300,1.45,30,0.82,0.68,5,0.78,0.72,3,mixed_or_uncertain

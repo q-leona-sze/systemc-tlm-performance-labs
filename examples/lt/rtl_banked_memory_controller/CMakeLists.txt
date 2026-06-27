@@ -1,0 +1,58 @@
+cmake_minimum_required(VERSION 3.24)
+
+project(project_h_rtl_banked_memory_controller LANGUAGES CXX)
+
+include(${CMAKE_CURRENT_LIST_DIR}/../../../cmake/SCTLBuildOptions.cmake)
+
+find_program(VERILATOR_EXECUTABLE verilator)
+if(NOT VERILATOR_EXECUTABLE)
+  message(STATUS "SKIP Project H RTL reference: Verilator executable not found.")
+  return()
+endif()
+
+set(PROJECT_H_BANK_COUNT "4" CACHE STRING "Project H RTL BANK_COUNT parameter")
+set(PROJECT_H_INTERLEAVE_BYTES "64" CACHE STRING "Project H RTL INTERLEAVE_BYTES parameter")
+set(PROJECT_H_SERVICE_LATENCY_CYCLES "10" CACHE STRING "Project H RTL SERVICE_LATENCY_CYCLES parameter")
+set(PROJECT_H_QUEUE_DEPTH "8" CACHE STRING "Project H RTL QUEUE_DEPTH parameter")
+
+set(RTL_TOP banked_memory_controller)
+set(RTL_FILE ${CMAKE_CURRENT_SOURCE_DIR}/rtl/banked_memory_controller.sv)
+set(SIM_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/sim/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/sim/csv_reader.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/sim/metrics.cpp
+)
+set(SIM_HEADERS
+  ${CMAKE_CURRENT_SOURCE_DIR}/sim/csv_reader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/sim/metrics.h
+)
+set(VERILATED_DIR ${CMAKE_CURRENT_BINARY_DIR}/verilated)
+set(VERILATED_BINARY ${VERILATED_DIR}/rtl_banked_memory_controller)
+set(OUTPUT_BINARY ${CMAKE_CURRENT_BINARY_DIR}/rtl_banked_memory_controller)
+
+set(PROJECT_H_CFLAGS
+  "-std=c++${SCTL_CXX_STANDARD} -I${CMAKE_CURRENT_SOURCE_DIR}/sim -DPROJECT_H_BANK_COUNT=${PROJECT_H_BANK_COUNT} -DPROJECT_H_INTERLEAVE_BYTES=${PROJECT_H_INTERLEAVE_BYTES} -DPROJECT_H_SERVICE_LATENCY_CYCLES=${PROJECT_H_SERVICE_LATENCY_CYCLES} -DPROJECT_H_QUEUE_DEPTH=${PROJECT_H_QUEUE_DEPTH}"
+)
+
+add_custom_command(
+  OUTPUT ${OUTPUT_BINARY}
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${VERILATED_DIR}
+  COMMAND ${VERILATOR_EXECUTABLE}
+    --cc ${RTL_FILE}
+    --top-module ${RTL_TOP}
+    --exe ${SIM_SOURCES}
+    --Mdir ${VERILATED_DIR}
+    --build
+    -GBANK_COUNT=${PROJECT_H_BANK_COUNT}
+    -GINTERLEAVE_BYTES=${PROJECT_H_INTERLEAVE_BYTES}
+    -GSERVICE_LATENCY_CYCLES=${PROJECT_H_SERVICE_LATENCY_CYCLES}
+    -GQUEUE_DEPTH=${PROJECT_H_QUEUE_DEPTH}
+    -CFLAGS ${PROJECT_H_CFLAGS}
+    -o rtl_banked_memory_controller
+  COMMAND ${CMAKE_COMMAND} -E copy ${VERILATED_BINARY} ${OUTPUT_BINARY}
+  DEPENDS ${RTL_FILE} ${SIM_SOURCES} ${SIM_HEADERS}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  VERBATIM
+)
+
+add_custom_target(rtl_banked_memory_controller_build ALL DEPENDS ${OUTPUT_BINARY})
