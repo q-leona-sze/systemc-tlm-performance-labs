@@ -1,0 +1,2 @@
+# Intentionally empty: this repository currently has no mandatory development-only
+# Python tooling. Add a tool here only when it is used by a checked-in workflow.

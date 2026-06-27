@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the repository and the accompanying technical book."
+title: "SystemC/TLM Architecture Performance Labs"
+type: software
+authors:
+  - name: "SystemC/TLM Architecture Performance Labs contributors"
+abstract: "Companion repository for Chip Architecture Modeling and Performance Analysis: From SystemC/TLM to Architecture Diagnosis."
+license: Apache-2.0

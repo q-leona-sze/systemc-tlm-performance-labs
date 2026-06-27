@@ -1,0 +1,2 @@
+# Optional dependency used by tools/render_portfolio_cards.py.
+matplotlib>=3.8

@@ -1,0 +1,22 @@
+Third-Party Notices
+
+This repository is distributed under the Apache License, Version 2.0. The full
+license text is available in LICENSE. Individual source files may carry
+additional copyright and license notices; those notices remain authoritative for
+the corresponding files and must not be removed.
+
+External SystemC dependency
+---------------------------
+
+The AT labs require a separately installed SystemC implementation. This
+repository does not redistribute SystemC source code. Configure the build with a
+local SystemC installation through variables such as SystemC_DIR,
+CMAKE_PREFIX_PATH, SYSTEMC_ROOT, SYSTEMC_HOME, USER_SYSTEMC_ROOT,
+USER_SYSTEMC_INCLUDE_DIR, or USER_SYSTEMC_LIB_DIR.
+
+Protocol-shape references
+-------------------------
+
+The AT documentation records that a local Doulos AT example was consulted as a
+protocol-shape reference during development. No Doulos source block or local
+reference tree is redistributed by this repository.
